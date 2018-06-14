@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.*
 import reactor.core.publisher.Flux
 
 
-@CrossOrigin(allowedHeaders = ["*"],methods = [RequestMethod.GET,RequestMethod.POST],origins = ["*"])
 @RestController
 @RequestMapping("temperature")
+@CrossOrigin(allowedHeaders = ["*"],methods = [RequestMethod.GET,RequestMethod.POST],origins = ["*"])
 class TemperatureController(val registeredTemperatureDAO: RegisteredTemperatureDAO, val reactiveMongoTemplate: ReactiveMongoTemplate) {
     @GetMapping fun getAll(): Flux<RegisteredTemperature> = registeredTemperatureDAO.findAll()
 
