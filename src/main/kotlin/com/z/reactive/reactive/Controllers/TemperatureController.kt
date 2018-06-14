@@ -11,16 +11,20 @@ import org.springframework.web.bind.annotation.*
 import reactor.core.publisher.Flux
 
 
+@CrossOrigin(allowedHeaders = ["*"],methods = [RequestMethod.GET,RequestMethod.POST],origins = ["*"])
 @RestController
 @RequestMapping("temperature")
 class TemperatureController(val registeredTemperatureDAO: RegisteredTemperatureDAO, val reactiveMongoTemplate: ReactiveMongoTemplate) {
-    @GetMapping fun getAll() = registeredTemperatureDAO.findAll()
+    @GetMapping fun getAll(): Flux<RegisteredTemperature> = registeredTemperatureDAO.findAll()
 
-    @GetMapping("/stream/{device}",produces = [MediaType.APPLICATION_STREAM_JSON_VALUE])
-    fun getByDevice(@PathVariable("device")device:String) = registeredTemperatureDAO.findByDevice(device)
+    @GetMapping("/stream/{device}",produces = [MediaType.TEXT_EVENT_STREAM_VALUE])//TEXT_EVENT_STREAM_VALUE = SSE default
+    fun getStreamByDevice(@PathVariable("device")device:String): Flux<RegisteredTemperature> = registeredTemperatureDAO.findByDevice(device)
 
-    @GetMapping("/arduinoStream", produces = [MediaType.APPLICATION_STREAM_JSON_VALUE])
-    fun test(): Flux<RegisteredTemperature> = reactiveMongoTemplate.tail(Query.query(Criteria.where("device").`is`("arduino")),RegisteredTemperature::class.java)
+    @GetMapping("/jsonStream/{device}",produces = [MediaType.APPLICATION_STREAM_JSON_VALUE])//SSE gets http 406
+    fun getJsonStreamByDevice(@PathVariable("device")device:String): Flux<RegisteredTemperature> = registeredTemperatureDAO.findByDevice(device)
+
+    @GetMapping("/arduinoJsonStream", produces = [MediaType.APPLICATION_STREAM_JSON_VALUE])
+    fun testTailQuery(): Flux<RegisteredTemperature> = reactiveMongoTemplate.tail(Query.query(Criteria.where("device").`is`("arduino")),RegisteredTemperature::class.java)
 
     @PostMapping fun save(@RequestBody registeredTemperature: RegisteredTemperature) = registeredTemperatureDAO.save(registeredTemperature)
 }
