@@ -1,26 +1,23 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-	<title>SSE test</title>
-	<script type="text/javascript" th:inline="javascript">
-		if(typeof(EventSource) !== "undefined") {
-		    //get value from model - default value
-            var device =/*[[${device}]]*/ 'arduino';
-		    var source = new EventSource("http://localhost:8080/temperature/stream/"+device);
-			source.onmessage = function(event) {
-			    document.getElementById("result").innerHTML += event.data + "<br>";
-			};
-			source.onopen = function (event) {
-              console.log("open",event.currentTarget.url);
-            }
-		} else {
-		    alert("tu navegador no admite SSE");
-		}
-
-	</script>
-</head>
-<body>
-<div id="result"></div>
-
-</body>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<title>Reactive test</title>
+	</head>
+	<body>
+		<table>
+			<thead>
+			<tr>
+				<th>Device</th>
+				<th>Temperature</th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr th:each="temp : ${temperatures}">
+				<td th:text="${temp.device}"></td>
+				<td th:text="${temp.temperature}"></td>
+			</tr>
+			</tbody>
+		</table>
+	</body>
 </html>

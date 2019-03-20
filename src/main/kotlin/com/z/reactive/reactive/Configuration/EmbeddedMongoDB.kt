@@ -1,30 +1,27 @@
 package com.z.reactive.reactive.Configuration
 
 
-import com.mongodb.MongoClient;
-
-import de.flapdoodle.embed.mongo.MongodExecutable;
-import de.flapdoodle.embed.mongo.MongodProcess;
-import de.flapdoodle.embed.mongo.MongodStarter;
-import de.flapdoodle.embed.mongo.config.IMongodConfig;
-import de.flapdoodle.embed.mongo.config.MongodConfigBuilder;
-import de.flapdoodle.embed.mongo.config.Net;
-import de.flapdoodle.embed.mongo.config.Storage;
-import de.flapdoodle.embed.mongo.distribution.Version;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import com.mongodb.MongoClient
+import de.flapdoodle.embed.mongo.MongodExecutable
+import de.flapdoodle.embed.mongo.MongodStarter
+import de.flapdoodle.embed.mongo.config.MongodConfigBuilder
+import de.flapdoodle.embed.mongo.config.Net
+import de.flapdoodle.embed.mongo.config.Storage
+import de.flapdoodle.embed.mongo.distribution.Version
 import org.springframework.beans.factory.annotation.Value
-import javax.annotation.PreDestroy
-import java.io.IOException
-import java.io.File
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import javax.annotation.PostConstruct
+import org.springframework.data.mongodb.MongoDbFactory
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.SimpleMongoDbFactory
-import org.springframework.data.mongodb.MongoDbFactory
+import java.io.File
+import java.io.IOException
 import java.net.UnknownHostException
 import java.nio.file.Files
+import java.util.logging.Level
+import java.util.logging.Logger
+import javax.annotation.PostConstruct
+import javax.annotation.PreDestroy
 
 @Configuration
 class EmbeddedMongoDB {
@@ -56,7 +53,7 @@ class EmbeddedMongoDB {
         fun construct() {
             deleteLock()
             val mongodConfig = MongodConfigBuilder()
-                    .version(Version.Main.PRODUCTION)
+                    .version(Version.Main.V3_5)
                     .replication(Storage(MONGO_DB_DIRPATH, null, 0))
                     .net(Net(MONGO_DB_URL, Integer.valueOf(MONGO_DB_PORT!!), true))
                     .build()

@@ -3,7 +3,6 @@ package com.z.reactive.reactive.Controllers
 import com.z.reactive.reactive.DAO.RegisteredTemperatureDAO
 import com.z.reactive.reactive.Models.RegisteredTemperature
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate
-import org.springframework.data.mongodb.core.find
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
 import org.springframework.http.MediaType
